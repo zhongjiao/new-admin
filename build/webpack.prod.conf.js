@@ -90,8 +90,8 @@ const webpackConfig = merge(baseWebpackConfig, {
     // copy custom static assets
     new CopyWebpackPlugin([
       {
-        from: resolve('static'),
-        to: config.build.assetsSubDirectory
+        from: resolve('public'),
+        to: config.build.assetsPublicPath
       }
     ])
   ],

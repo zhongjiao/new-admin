@@ -33,7 +33,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     host: HOST || config.dev.host,
     port: PORT || config.dev.port,
     historyApiFallback: true, // true index.html upon 404, object for multiple paths
-    contentBase: resolve('static'), // static file location
+    contentBase: resolve('public'), // static file location
     compress: true, // enable gzip compression
     overlay: config.dev.errorOverlay
       ? { warnings: false, errors: true }
