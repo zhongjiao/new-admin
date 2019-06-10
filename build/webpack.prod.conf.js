@@ -4,9 +4,11 @@ const utils = require('./utils')
 const webpack = require('webpack')
 const config = require('../config')
 const merge = require('webpack-merge')
+const globAll = require('glob-all')
+const PurifyCss = require('purifycss-webpack')
 const baseWebpackConfig = require('./webpack.base.conf')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+// const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
@@ -49,21 +51,17 @@ const webpackConfig = merge(baseWebpackConfig, {
     // generate dist index.html with correct asset hash for caching.
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
-    new HtmlWebpackPlugin({
-      filename: config.build.index,
-      template: resolve('public/index.html'),
-      inject: true,
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeAttributeQuotes: true
-        // more options:
-        // https://github.com/kangax/html-minifier#options-quick-reference
-      }
-      // default sort mode uses toposort which cannot handle cyclic deps
-      // in certain cases, and in webpack 4, chunk order in HTML doesn't
-      // matter anyway
-    }),
+    // new HtmlWebpackPlugin({
+    //   filename: config.build.index,
+    //   template: resolve('public/index.html'),
+    //   inject: true,
+    //   favicon: resolve('public/favicon.1.ico'),
+    //   minify: {
+    //     removeComments: true,
+    //     collapseWhitespace: true,
+    //     removeAttributeQuotes: true
+    //   }
+    // }),
     new ScriptExtHtmlWebpackPlugin({
       //`runtime` must same as runtimeChunk name. default is `runtime`
       inline: /runtime\..*\.js$/
@@ -93,7 +91,13 @@ const webpackConfig = merge(baseWebpackConfig, {
         from: resolve('public'),
         to: config.build.assetsPublicPath
       }
-    ])
+    ]),
+    new PurifyCss({
+      paths: globAll.sync([
+        resolve('src/pages/*/App.vue'),
+        resolve('src/pages/*.js')
+      ])
+    })
   ],
   optimization: {
     splitChunks: {
@@ -105,11 +109,11 @@ const webpackConfig = merge(baseWebpackConfig, {
           priority: 10,
           chunks: 'initial' // 只打包初始时依赖的第三方
         },
-        elementUI: {
-          name: 'chunk-elementUI',
-          priority: 20, // 权重要大于 libs 和 app 不然会被打包进 libs 或者 app
-          test: /[\\/]node_modules[\\/]element-ui[\\/]/
-        }
+        // elementUI: {
+        //   name: 'chunk-elementUI',
+        //   priority: 20, // 权重要大于 libs 和 app 不然会被打包进 libs 或者 app
+        //   test: /[\\/]node_modules[\\/]element-ui[\\/]/
+        // }
       }
     },
     runtimeChunk: 'single',

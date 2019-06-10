@@ -5,7 +5,7 @@ const webpack = require('webpack')
 const config = require('../config')
 const merge = require('webpack-merge')
 const baseWebpackConfig = require('./webpack.base.conf')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+// const HtmlWebpackPlugin = require('html-webpack-plugin')
 const portfinder = require('portfinder')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 
@@ -26,6 +26,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   },
   // cheap-module-eval-source-map is faster for development
   devtool: config.dev.devtool,
+
   devServer: {
     clientLogLevel: 'warning',
     hot: true,
@@ -33,7 +34,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     host: HOST || config.dev.host,
     port: PORT || config.dev.port,
     historyApiFallback: true, // true index.html upon 404, object for multiple paths
-    contentBase: resolve('public'), // static file location
+    // contentBase: resolve('public'), // static file location
     compress: true, // enable gzip compression
     overlay: config.dev.errorOverlay
       ? { warnings: false, errors: true }
@@ -47,11 +48,18 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       'process.env': require('../config/dev.env')
     }),
     new webpack.HotModuleReplacementPlugin(),
-    new HtmlWebpackPlugin({
-      template: 'public/index.html',
-      filename: 'index.html',
-      inject: true
-    })
+    // new HtmlWebpackPlugin({
+    //   template: 'public/index.html',
+    //   filename: 'index.html',
+    //   inject: true
+    // // })
+    // new HtmlWebpackPlugin({
+    //   filename: 'index.html',
+    //   template: 'public/index.html',
+    //   inject: true,
+    //   favicon: resolve('public/favicon.1.ico'),
+    //   title: 'vue-admin-template'
+    // })
   ]
 })
 

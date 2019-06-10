@@ -1,0 +1,48 @@
+body {
+  color: #515a6e;
+  font-size: 14px;
+}
+.nt-t-center {
+  text-align: center;
+}
+.nt-container {
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  background-color: #f5f7f9; 
+}
+.nt-header {
+  padding: 20px;
+  margin-bottom: 12px;
+}
+.nt-body, .nt-header {
+  background-color: #fff;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+.nt-w25 {
+  width: 25%;
+}
+.nt-w70 {
+  width: 70%!important;
+}
+.nt-mt12 {
+  margin-top: 12px;
+}
+.nt-inline-block {
+  display: inline-block;
+}
+.nt-toFlex {
+  display: flex;
+}
+.nt-flex1 {
+  flex: 1;
+}
+.nt-flex-column {
+  flex-direction: column;
+}
+.nt-auto-scroll {
+  overflow: auto;
+}

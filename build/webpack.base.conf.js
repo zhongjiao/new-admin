@@ -12,7 +12,13 @@ function resolve(dir) {
 module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
-    index: './src/pages/index/index.js'
+    // index: resolve('src/pages/index/index.js')
+    ...utils.multiPages.entryObj
+  },
+  externals: {
+    'vue': 'Vue',
+    'element-ui': 'ELEMENT',
+    'axios': 'axios'
   },
   output: {
     path: config.build.assetsRoot,
@@ -23,9 +29,10 @@ module.exports = {
         : config.dev.assetsPublicPath
   },
   resolve: {
-    extensions: ['.js', '.vue', '.json'],
+    extensions: ['.js', '.vue', '.json', '.scss'],
     alias: {
-      '@': resolve('src')
+      '@': resolve('src'),
+      '@a': resolve('src/assets')
     }
   },
   module: {
@@ -43,9 +50,7 @@ module.exports = {
       {
         test: /\.svg$/,
         loader: 'svg-sprite-loader',
-        include: [
-          resolve('src/assets/icons')
-        ],
+        include: [resolve('src/assets/icons')],
         options: {
           symbolId: 'icon-[name]'
         }
@@ -53,9 +58,7 @@ module.exports = {
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
-        exclude: [
-          resolve('src/assets/icons')
-        ],
+        exclude: [resolve('src/assets/icons')],
         options: {
           limit: 10000,
           name: utils.assetsPath('img/[name].[hash:7].[ext]')
@@ -76,11 +79,12 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
-      },
+      }
     ]
   },
   plugins: [
-    new VueLoaderPlugin()
+    new VueLoaderPlugin(),
+    ...utils.multiPages.htmlArray
   ],
   node: {
     // prevent webpack from injecting useless setImmediate polyfill because Vue

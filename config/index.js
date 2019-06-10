@@ -21,13 +21,11 @@ module.exports = {
     // in the browser
     showEslintErrorsInOverlay: false,
 
-    devtool: 'cheap-module-eval-source-map',
+    devtool: 'cheap-source-map',
 
     cssSourceMap: false
   },
   build: {
-
-    index: path.resolve(__dirname, '../dist/index.html'),
 
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'assets',
