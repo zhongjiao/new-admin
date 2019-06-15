@@ -16,7 +16,7 @@ exports.multiPages = (function() {
   let getHtmlConfig = function(name, chunks) {
     let isDev = process.env.NODE_ENV === 'development'
     return {
-      template: resolve(`public/${name}.html`),
+      template: resolve(`public/index.html`),
       filename: isDev ? `${name}.html` : resolve(`dist/${name}.html`),
       favicon: resolve('public/favicon.ico'),
       inject: true,

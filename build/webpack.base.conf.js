@@ -28,6 +28,10 @@ module.exports = {
       '@c': resolve('src/components'),
     }
   },
+  // externals: {
+  //   'vue': 'Vue',
+  //   'element-ui': 'ELEMENT'
+  // },
   module: {
     rules: [
       {
