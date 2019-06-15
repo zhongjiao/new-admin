@@ -43,7 +43,7 @@
           </el-col>
         </el-row>
         <div class="nt-mt12">
-          <el-button size="small" type="warning">查询</el-button>
+          <el-button size="small" type="primary">查询</el-button>
         </div>
       </el-header>
       <el-main class="nt-body nt-toFlex nt-flex-column">

@@ -14,7 +14,6 @@ function resolve(dir) {
 module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
-    // index: resolve('src/pages/order/index.js')
     ...utils.multiPages.entryObj
   },
   resolve: {
@@ -25,7 +24,8 @@ module.exports = {
     extensions: ['.js', '.vue', '.json', '.scss'],
     alias: {
       '@': resolve('src'),
-      '@a': resolve('src/assets')
+      '@a': resolve('src/assets'),
+      '@c': resolve('src/components'),
     }
   },
   module: {
@@ -77,17 +77,6 @@ module.exports = {
   },
   plugins: [
     new VueLoaderPlugin(),
-    // new HtmlWebpackPlugin({
-    //   filename: 'order.html',
-    //   template: 'public/index.html',
-    //   inject: true,
-    //   // favicon: resolve('public/favicon.ico'),
-    //   minify: {
-    //     removeComments: true,
-    //     collapseWhitespace: true,
-    //     removeAttributeQuotes: true
-    //   }
-    // }),
     ...utils.multiPages.htmlArray,
   ],
   node: {

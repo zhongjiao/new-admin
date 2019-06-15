@@ -12,7 +12,10 @@ import {
   DatePicker,
   Table,
   TableColumn,
-  Pagination
+  Pagination,
+  Message,
+  Loading,
+  MessageBox
 } from 'element-ui'
 
 const components = {
@@ -34,3 +37,11 @@ const components = {
 Object.keys(components).forEach(component => {
   Vue.use(components[component])
 })
+
+Vue.use(Loading.directive)
+
+Vue.prototype.$loading = Loading.service
+Vue.prototype.$message = Message
+Vue.prototype.$msgbox = MessageBox
+Vue.prototype.$confirm = MessageBox.confirm;
+Vue.prototype.$prompt = MessageBox.prompt
