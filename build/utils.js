@@ -18,11 +18,10 @@ exports.multiPages = (function() {
     return {
       template: resolve(`public/${name}.html`),
       filename: isDev ? `${name}.html` : resolve(`dist/${name}.html`),
-      favicon: resolve('public/favicon.1.ico'),
-      // title: title,
+      favicon: resolve('public/favicon.ico'),
       inject: true,
       hash: !isDev, //开启hash  ?[hash]
-      chunks: chunks,
+      chunks: isDev ? [chunks] : [`runtime`, 'chunk-libs', 'chunk-elementUI', chunks],
       minify:
         isDev
           ? false
@@ -43,9 +42,8 @@ exports.multiPages = (function() {
       let n = name.slice(start, end)
       n = n.slice(0, n.lastIndexOf('/')) //保存各个组件的入口
       n = n.split('/')[1]
-      entry[n] = name
+      entry[n] = ['@babel/polyfill', name]
     })
-    // console.log('entry: ', entry)
     return entry
   }
 
@@ -54,7 +52,7 @@ exports.multiPages = (function() {
   const htmlArray = []
   Object.keys(entryObj).forEach(element => {
     htmlArray.push(
-      new HtmlWebpackPlugin(getHtmlConfig(element, ['vendor', element]))
+      new HtmlWebpackPlugin(getHtmlConfig(element, element))
     )
   })
   return {

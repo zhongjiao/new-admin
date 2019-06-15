@@ -4,11 +4,11 @@ const utils = require('./utils')
 const webpack = require('webpack')
 const config = require('../config')
 const merge = require('webpack-merge')
-const globAll = require('glob-all')
-const PurifyCss = require('purifycss-webpack')
+const glob = require('glob')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const baseWebpackConfig = require('./webpack.base.conf')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-// const HtmlWebpackPlugin = require('html-webpack-plugin')
+const purifyCssWebpack = require("purifycss-webpack")
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
@@ -28,14 +28,15 @@ const webpackConfig = merge(baseWebpackConfig, {
   mode: 'production',
   module: {
     rules: utils.styleLoaders({
-      sourceMap: config.build.productionSourceMap,
+      sourceMap: process.env.NODE_ENV === 'test',
       extract: true,
       usePostCSS: true
     })
   },
-  devtool: config.build.productionSourceMap ? config.build.devtool : false,
+  devtool: process.env.NODE_ENV === 'test' ? config.build.devtool : false,
   output: {
     path: config.build.assetsRoot,
+    publicPath: config.build.assetsPublicPath,
     filename: utils.assetsPath('js/[name].[chunkhash:8].js'),
     chunkFilename: utils.assetsPath('js/[name].[chunkhash:8].js')
   },
@@ -48,56 +49,20 @@ const webpackConfig = merge(baseWebpackConfig, {
       filename: utils.assetsPath('css/[name].[contenthash:8].css'),
       chunkFilename: utils.assetsPath('css/[name].[contenthash:8].css')
     }),
-    // generate dist index.html with correct asset hash for caching.
-    // you can customize output by editing /index.html
-    // see https://github.com/ampedandwired/html-webpack-plugin
-    // new HtmlWebpackPlugin({
-    //   filename: config.build.index,
-    //   template: resolve('public/index.html'),
-    //   inject: true,
-    //   favicon: resolve('public/favicon.1.ico'),
-    //   minify: {
-    //     removeComments: true,
-    //     collapseWhitespace: true,
-    //     removeAttributeQuotes: true
-    //   }
-    // }),
+    // new CleanWebpackPlugin(),
     new ScriptExtHtmlWebpackPlugin({
-      //`runtime` must same as runtimeChunk name. default is `runtime`
-      inline: /runtime\..*\.js$/
     }),
-    // keep chunk.id stable when chunk has no name
-    new webpack.NamedChunksPlugin(chunk => {
-      if (chunk.name) {
-        return chunk.name
-      }
-      const modules = Array.from(chunk.modulesIterable)
-      if (modules.length > 1) {
-        const hash = require('hash-sum')
-        const joinedHash = hash(modules.map(m => m.id).join('_'))
-        let len = nameLength
-        while (seen.has(joinedHash.substr(0, len))) len++
-        seen.add(joinedHash.substr(0, len))
-        return `chunk-${joinedHash.substr(0, len)}`
-      } else {
-        return modules[0].id
-      }
-    }),
-    // keep module.id stable when vender modules does not change
     new webpack.HashedModuleIdsPlugin(),
-    // copy custom static assets
     new CopyWebpackPlugin([
       {
-        from: resolve('public'),
-        to: config.build.assetsPublicPath
+        from: resolve('static'),
+        to: config.build.assetsSubDirectory
       }
     ]),
-    new PurifyCss({
-      paths: globAll.sync([
-        resolve('src/pages/*/App.vue'),
-        resolve('src/pages/*.js')
-      ])
-    })
+    // new purifyCssWebpack({
+    //   // glob为扫描模块，使用其同步方法
+    //   paths: glob.sync(resolve('public/*.html'))
+    // })
   ],
   optimization: {
     splitChunks: {
@@ -107,13 +72,14 @@ const webpackConfig = merge(baseWebpackConfig, {
           name: 'chunk-libs',
           test: /[\\/]node_modules[\\/]/,
           priority: 10,
+          enforce: true,
           chunks: 'initial' // 只打包初始时依赖的第三方
         },
-        // elementUI: {
-        //   name: 'chunk-elementUI',
-        //   priority: 20, // 权重要大于 libs 和 app 不然会被打包进 libs 或者 app
-        //   test: /[\\/]node_modules[\\/]element-ui[\\/]/
-        // }
+        elementUI: {
+          name: 'chunk-elementUI',
+          priority: 20, // 权重要大于 libs 和 app 不然会被打包进 libs 或者 app
+          test: /[\\/]node_modules[\\/]element-ui[\\/]/
+        }
       }
     },
     runtimeChunk: 'single',
@@ -122,13 +88,20 @@ const webpackConfig = merge(baseWebpackConfig, {
         uglifyOptions: {
           mangle: true
         },
-        sourceMap: config.build.productionSourceMap,
+        sourceMap: process.env.NODE_ENV === 'test',
         cache: true,
         parallel: true
       }),
       // Compress extracted CSS. We are using this plugin so that possible
       // duplicated CSS from different components can be deduped.
-      new OptimizeCSSAssetsPlugin()
+      new OptimizeCSSAssetsPlugin({
+        cssProcessor: require('cssnano'),
+        cssProcessorOptions: {
+            discardComments: {
+              removeAll: true
+            }
+        }
+      })
     ]
   }
 })

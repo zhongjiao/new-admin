@@ -3,6 +3,10 @@
 const path = require('path')
 
 module.exports = {
+  common: {
+    needDll: true,
+    publicPath: '/'
+  },
   dev: {
     assetsSubDirectory: 'public',
     assetsPublicPath: '/',
@@ -13,12 +17,7 @@ module.exports = {
     errorOverlay: true,
     notifyOnErrors: false, //编译错误的时候通知提示，需要friendly-errors-webpack-plugin 配合
     poll: false,
-    // Use Eslint Loader?
-    // If true, your code will be linted during bundling and
-    // linting errors and warnings will be shown in the console.
     useEslint: true,
-    // If true, eslint errors and warnings will be shown in the error overlay
-    // in the browser
     showEslintErrorsInOverlay: false,
 
     devtool: 'cheap-source-map',
@@ -47,7 +46,7 @@ module.exports = {
     // Surge or Netlify already gzip all static assets for you.
     // Before setting to `true`, make sure to:
     // npm install --save-dev compression-webpack-plugin
-    productionGzip: false,
+    productionGzip: true,
     productionGzipExtensions: ['js', 'css'],
 
     // Run the build command with an extra argument to

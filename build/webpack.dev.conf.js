@@ -18,6 +18,11 @@ const PORT = process.env.PORT && Number(process.env.PORT)
 
 const devWebpackConfig = merge(baseWebpackConfig, {
   mode: 'development',
+  output: {
+    path: config.build.assetsRoot,
+    filename: '[name].js',
+    publicPath: config.dev.assetsPublicPath
+  },
   module: {
     rules: utils.styleLoaders({
       sourceMap: config.dev.cssSourceMap,

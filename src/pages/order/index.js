@@ -1,12 +1,10 @@
 import Vue from 'vue'
 import App from './App'
 
-// import ElementUI from 'element-ui'
-// import 'theme/index.css'
-// import 'element-ui/lib/theme-chalk/index.css'
+import '@babel/polyfill'
 
-// import '../../../theme/index.css'
 import './components/index'
+// import 'element-ui/lib/theme-chalk/index.css'
 
 import '@a/style/common'
 

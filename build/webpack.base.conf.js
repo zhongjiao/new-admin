@@ -1,9 +1,11 @@
 'use strict'
 const path = require('path')
-const config = require('../config')
 const utils = require('./utils')
+// const webpack = require('webpack')
+const config = require('../config')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const vueLoaderConfig = require('./vue-loader.conf')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 function resolve(dir) {
   return path.join(__dirname, '..', dir)
@@ -12,23 +14,14 @@ function resolve(dir) {
 module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
-    // index: resolve('src/pages/index/index.js')
+    // index: resolve('src/pages/order/index.js')
     ...utils.multiPages.entryObj
   },
-  externals: {
-    'vue': 'Vue',
-    'element-ui': 'ELEMENT',
-    'axios': 'axios'
-  },
-  output: {
-    path: config.build.assetsRoot,
-    filename: '[name].js',
-    publicPath:
-      process.env.NODE_ENV === 'production'
-        ? config.build.assetsPublicPath
-        : config.dev.assetsPublicPath
-  },
   resolve: {
+    modules: [
+      resolve('src'), // 指定以下目录寻找第三方模块，避免webpack往父级目录递归搜索
+      resolve('node_modules') // 只采用index字段作为入口文件描述字段，减少搜索步骤
+    ],
     extensions: ['.js', '.vue', '.json', '.scss'],
     alias: {
       '@': resolve('src'),
@@ -84,14 +77,21 @@ module.exports = {
   },
   plugins: [
     new VueLoaderPlugin(),
-    ...utils.multiPages.htmlArray
+    // new HtmlWebpackPlugin({
+    //   filename: 'order.html',
+    //   template: 'public/index.html',
+    //   inject: true,
+    //   // favicon: resolve('public/favicon.ico'),
+    //   minify: {
+    //     removeComments: true,
+    //     collapseWhitespace: true,
+    //     removeAttributeQuotes: true
+    //   }
+    // }),
+    ...utils.multiPages.htmlArray,
   ],
   node: {
-    // prevent webpack from injecting useless setImmediate polyfill because Vue
-    // source contains it (although only uses it if it's native).
     setImmediate: false,
-    // prevent webpack from injecting mocks to Node native modules
-    // that does not make sense for the client
     dgram: 'empty',
     fs: 'empty',
     net: 'empty',

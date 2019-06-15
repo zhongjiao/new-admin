@@ -25,12 +25,6 @@
             <el-date-picker class="nt-w70" size="small" type="date" placeholder="选择日期"/>
           </el-col>
           <el-col :span="8">
-            <span class="nt-w25 nt-inline-block">客户姓名：</span>
-            <el-input class="nt-w70" size="small" placeholder="客户姓名"/>
-          </el-col>
-        </el-row>
-        <el-row class="nt-mt12" :gutter="20">
-          <el-col :span="8">
             <span class="nt-w25 nt-inline-block">订单状态：</span>
             <el-select v-model="status" class="nt-w70" size="small" placeholder="订单状态">
               <el-option
@@ -78,8 +72,8 @@
           :page-sizes="[100, 200, 300, 400]"
           :page-size="100"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="400">
-        </el-pagination>
+          :total="400"
+        ></el-pagination>
       </el-main>
     </el-container>
   </div>
@@ -112,7 +106,7 @@ export default {
           realMount: '',
           customerName: '',
           referrerCode: '',
-          referrerBank: '',
+          referrerBank: ''
         },
         {
           code: '',
@@ -133,8 +127,8 @@ export default {
           realMount: '',
           customerName: '',
           referrerCode: '',
-          referrerBank: '',
-        },
+          referrerBank: ''
+        }
       ],
       channels: [
         {
@@ -187,12 +181,8 @@ export default {
     }
   },
   methods: {
-    handleSizeChange() {
-
-    },
-    handleCurrentChange() {
-
-    }
+    handleSizeChange() {},
+    handleCurrentChange() {}
   }
 }
 </script>
